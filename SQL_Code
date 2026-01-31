@@ -1,0 +1,229 @@
+CREATE DATABASE Livraria
+DEFAULT CHARSET = utf8
+DEFAULT COLLATE = utf8_general_ci;
+
+/*CRIANDO TABELA CLIENTE*/
+CREATE TABLE Cliente (cod_cliente INT NOT NULL primary key auto_increment, nome VARCHAR (50), email VARCHAR (70), rua VARCHAR (70), bairro VARCHAR (70), cidade VARCHAR (70), estado VARCHAR (70));
+Create TABLE Telefone (telefone_1 INT NOT NULL, telefone_2 INT);
+
+/*Verificando a criação das Tabelas*/
+select * from Cliente
+select * from Telefone
+
+/*TABELAS FILHAS QUE DIVIDEM CLIENTES CNPJ E CLIENTES CPF*/
+CREATE TABLE Pessoa_Fisica (cod_pessoafisica INT NOT NULL primary key auto_increment, CPF VARCHAR (14) NOT NULL, RG INT (9) NOT NULL)
+CREATE TABLE Pessoa_Juridica (cod_pessoajuridica INT NOT NULL primary key auto_increment, CNPJ VARCHAR (18) NOT NULL, IE INT (9) NOT NULL);
+
+/*Verificando as tabelas "filhas"*/
+select * from Pessoa_fisica
+select * from Pessoa_Juridica
+
+/*Criando a Tabela Editora*/
+CREATE TABLE Editora (cod_editora INT NOT NULL primary key auto_increment, Nome_contato VARCHAR (50), email VARCHAR (50));
+CREATE TABLE Telefone_editora (telefone_1 INT NOT NULL, telefone_2 INT);
+
+/*Verificando as Tabelas Editora e Telefone_editora*/
+select * from Editora
+select * from Telefone_editora
+
+/*Criando a tabela Livro*/
+CREATE TABLE Livros (cod_livro INT NOT NULL primary key auto_increment, Titulo VARCHAR (70), Autor VARCHAR (50), Categoria VARCHAR (50), ISBN INT (13) NOT NULL, preço DECIMAL (10,2), ano_publicacao SMALLINT)
+
+/*Verificando a Tabela Livros*/
+select * from Livros
+
+/*Criando Tabela Pedido*/
+CREATE TABLE Pedido (cod_pedido INT NOT NULL primary key auto_increment, valor_pedido DECIMAL (10,2) NOT NULL, data_pedido DATE NOT NULL)
+
+/*Verificando a Tabela Pedido*/
+Select * from Pedido
+
+/*Alterando nome da Tabela Telefone para Telefone_cliente*/
+ALTER TABLE `livraria`.`telefone` 
+RENAME TABLE telefone to telefone_cliente
+
+/*Atribuindo chaves estrangeiras*/
+ALTER TABLE pessoa_fisica ADD cod_cliente INT
+
+ALTER TABLE pessoa_juridica ADD cod_clientePJ INT
+
+ALTER TABLE livros ADD cod_editora INT
+
+ALTER TABLE pessoa_fisica 
+ADD CONSTRAINT FK_cod_cliente
+FOREIGN KEY (cod_cliente) REFERENCES cliente(cod_cliente)
+ON DELETE Cascade;
+
+ALTER TABLE pessoa_juridica
+ADD CONSTRAINT FK_cod_clientePJ
+FOREIGN KEY (cod_clientePJ) REFERENCES cliente(cod_cliente)
+ON DELETE Cascade;
+
+ALTER TABLE livros
+ADD CONSTRAINT FK_cod_editora
+FOREIGN KEY (cod_editora) REFERENCES editora (cod_editora)
+ON DELETE Cascade;
+
+/*Verificando as chaves*/
+select * from pessoa_fisica
+select * from pessoa_juridica
+select * from livros
+
+/*Atribuindo valores*/
+INSERT INTO cliente (nome, email, rua, bairro, cidade, estado)
+Values ('Felipi', 'h-felipi@estudante.unisa.com.br', 'Blasco Ibanez', 'Jd. Icarai', 'São Paulo', 'SP')
+
+/*Teste atribuição*/
+select * from cliente
+
+/*Continuar adicionando dados nas seguintes tabelas*/
+INSERT INTO cliente (nome, email, rua, bairro, cidade, estado)
+Values ('Robert', 'robert@estudante.unisa.com.br', 'Antonio Ribeiro Pina', 'Capão Redondo', 'São Paulo', 'SP'), ('Emilly', 'emilly@estudante.unisa.com.br', 'das flores', 'Taboão da Serra', 'São Paulo', 'SP'), ('Daiane', 'daiane@estudante.unisa.com.br', 'das graças', 'Itapecerica da Serra', 'São Paulo', 'SP'), ('Rhyan', 'rhyan@estudante.unisa.com.br', 'dos cria', 'Varginha', 'São Paulo', 'SP'), ('Stephanie', 'stephanie@estudante.unisa.com.br', 'wellington borges', 'Interlagos', 'São Paulo', 'SP'), ('Pedro', 'pedro@estudante.unisa.com.br', 'das cores', 'Jd. Capela', 'São Paulo', 'SP'), ('Ana', 'ana@estudante.unisa.com.br', 'Avenida dos Sonhos', 'Bela Vista', 'Rio de Janeiro', 'RJ'), ('Lucas', 'lucas@estudante.unisa.com.br', 'Praça das Árvores', 'Jardim Botânico', 'Brasília', 'DF'), ('Mariana', 'mariana@estudante.unisa.com.br', 'Travessa das Estrelas', 'Golfinho', 'Recife', 'PE'), ('Guilherme', 'guilherme@estudante.unisa.com.br', 'Rua das Pedras', 'Pedra Branca', 'Belo Horizonte', 'MG'), ('Isabela', 'isabela@estudante.unisa.com.br', 'Alameda dos Girassóis', 'Girassol', 'Curitiba', 'PR'), ('Rafaela', 'rafaela@estudante.unisa.com.br', 'Rodovia do Sol', 'Sol Nascente', 'Vitória', 'ES'), ('Bruno', 'bruno@estudante.unisa.com.br', 'Travessa das Palmeiras', 'Palmeiral', 'Porto Alegre', 'RS'), ('Camila', 'camila@estudante.unisa.com.br', 'Avenida das Dunas', 'Dunas Douradas', 'Natal', 'RN'), ('Gustavo', 'gustavo@estudante.unisa.com.br', 'Praça dos Ventos', 'Ventania', 'Fortaleza', 'CE'), ('Letícia', 'leticia@estudante.unisa.com.br', 'Rua da Paz', 'Paz e Amor', 'Goiânia', 'GO'), ('Thiago', 'thiago@estuandte.unisa.com.br', 'Alameda das Rosas', 'Rosal', 'Manaus', 'AM'), ('Juliana', 'juliana@estudante.unisa.com.br', 'Rua das Ondas', 'Ondas Azuis', 'Florianópolis', 'SC'), ('Leonardo', 'leonardo@estudante.unisa.com.br', 'Avenida da Lua', 'Lua Cheia', 'João Pessoa', 'PB');
+
+/*Checando atribuição*/
+select * from cliente
+
+INSERT INTO pessoa_fisica (CPF, RG, cod_cliente)
+Values ('8292131200', '183243547', 1);
+
+/*Checando dados*/
+select * from pessoa_fisica
+
+INSERT INTO pessoa_fisica (CPF, RG, cod_cliente)
+Values ('56274323066', '412309099', 2), ('94697604091', '412309099', 3), ('81839700017', '373205053', 4), ('53515237011', '127867107', 5), ('22762986001', '306832537', 11), ('21293245097', '214536026', 12), ('09622922066', '471084104', 13), ('73590207000', '466943519', 14), ('38022844020', '173185459', 15)
+
+/*Testando Relacionamento*/
+select pessoa_fisica.CPF as 'cpf', cliente.Nome as 'nome'
+from pessoa_fisica, cliente
+Where pessoa_fisica.cod_cliente = cliente.cod_cliente;
+
+/*Atribuindo dados e relacionamento na tabela pessoa_juridica*/
+
+INSERT INTO pessoa_juridica (CNPJ, IE, cod_clientePJ)
+Values ('70119671000151', '226013421', 6), ('80788034000121', '219002669', 7), ('219002669625', '52795958', 8), ('67319977000147', '071173070', 9), ('67319977000147', '958995370', 10), ('10397842000182', '440640580', 16), ('46181185000189', '564903884', 17), ('95611687000108', '568690290', 18), ('79113746000161', '055623522', 19), ('05421699000187', '349984948', 20);
+
+/*Verificando dados*/
+select * from pessoa_juridica
+
+/*Testando Relacionamentos*/
+select pessoa_juridica.CNPJ as 'cnpj', cliente.Nome as 'nome'
+from pessoa_juridica, cliente
+Where pessoa_juridica.cod_pessoajuridica = cliente.cod_cliente;
+
+/*Relacionando a tabela telefone_cliente com a tabela cliente*/
+ALTER TABLE telefone_cliente ADD TEL_cliente INT
+
+select * from telefone_cliente
+
+ALTER TABLE telefone_cliente
+ADD CONSTRAINT FK_TEL_cliente
+FOREIGN KEY (TEL_cliente) REFERENCES cliente(cod_cliente)
+ON DELETE Cascade;
+
+INSERT INTO telefone_cliente (telefone_1, telefone_2, TEL_cliente)
+Values (1192126872, 1155563398, 1), (1131701142, 1135334115, 2), (1122891411, 1122895511, 3), (1132198514, 1121326757, 4), (1131125019, 1130747826, 5), (1135200968, 1135073561, 6), (2122257994, 2135624377, 7), (613520836, 615779672, 8), (812562802, 812923697, 9), (312893197, 313013469, 10), (423826353, 422912550, 11), (273212626, 273571110, 12), (533431145, 531634583, 13), (842666181, 843825594, 14), (882884181, 882623245, 15), (623252871, 622866382, 16), (923659411, 923065806, 17), (473655098, 473265745, 18), (832406536, 833847267, 19), (112285086, 113351793, 20);
+
+select telefone_cliente.telefone_1 as 'telefone', cliente.nome as 'nome'
+from telefone_cliente, cliente
+Where telefone_cliente.TEL_cliente = cliente.cod_cliente;
+
+/*Atribuindo dados à tabela Livros*/
+INSERT INTO editora (Nome_contato, email)
+Values ('Wellington', 'wellingtonsf@savat.com'), ('Maria', 'mariagoncalves@saraiva.com'), ('Joao', 'joaosiqueira@galera.com'), ('Kevin', 'kevindaevoque@darskside.com'), ('Amanda', 'amandasoares@recordeditora.com');
+
+select * from editora 
+
+/*Colocando os nomes das editoras*/
+ALTER TABLE editora ADD nome_editora VARCHAR (50)
+INSERT INTO editora (nome_editora)
+Values ('Savat'), ('Saraiva'), ('Galera'), ('Darkside'), ('Record');
+
+/*Adicionando o nome das Editoras*/
+UPDATE editora SET nome_editora = 'Savat' where cod_editora = 1;
+UPDATE editora SET nome_editora = 'Saraiva' WHERE cod_editora = 2;
+UPDATE editora SET nome_editora = 'Galera' WHERE cod_editora = 3;
+UPDATE editora SET nome_editora = 'Darkside' WHERE cod_editora = 4;
+UPDATE editora SET nome_editora = 'Record' WHERE cod_editora = 5;
+
+select * from editora
+
+/*Renomeando a coluna Preço da tabela livros, para padronizá-lo*/
+ALTER TABLE livros
+RENAME COLUMN preço to preco
+
+/*Adicionando os telefones da editora*/
+ALTER TABLE telefone_editora ADD TEL_clientePJ INT
+
+ALTER TABLE telefone_editora
+ADD CONSTRAINT FK_TEL_clientePJ
+FOREIGN KEY (TEL_clientePJ) REFERENCES editora(cod_editora)
+ON DELETE CASCADE;
+
+INSERT INTO telefone_editora (telefone_1, telefone_2, TEL_clientePJ)
+Values (116957224, 115247896, 1), (115663984, 116695847, 2), (215693417, 216579364, 3), (215693541, 115489765, 4), (115599341, 215577846, 5);
+
+/*Atribuindo dados à tabela livros*/
+INSERT INTO livros (Titulo, Autor, Categoria, ISBN, preco, ano_publicacao, cod_editora)
+Values ('As vantagens de ser invisivel', 'Stephen Chbosky', 'Romance', 152634865, 29.99, 1999, 2), ('20.000 Léguas Submarinas', 'Julio Verne', 'Aventura', 536248162, 34.99, 1954, 1), ('Metamorfose', 'Franz Kafka', 'Horror', 856471235, 32.99, 1915, 4), ('Iracema', 'Jose de Alencar', 'Romance', 563419876,  24.99, 1865, 5), ('Dom Casmurro', 'Machado de Assis', 'Romance', 521480324, 24.99, 1899, 5), ('O Cortiço', 'Aluisio Azevedo', 'Romance', 874315692, 23.99, 1890, 3), ('Capitães de Areia', 'Jorge Amado', 'Ficcão', 630145278, 32.99, 1937, 1), ('Memorias de um Sargento de Milicias', 'Manuel Antonio de Almeida', 'Ficcao', 876132083, 39.99, 1853, 3), ('Declinio de um Homem', 'Osamu Dazai', 'Ficcao', 874315942, 27.99, 1948, 5), ('Assim falou Zaratustra', 'Friedrich Nietzsche', 'Filosofia', 625214389, 29.99, 1883, 4)
+
+select * from livros
+
+/*Criando a Tabela Entidade - Relacionamento para completar a tabela Pedido*/
+CREATE TABLE Item_Pedido (cod_compracliente INT NOT NULL, cod_item INT NOT NULL, cod_item2 INT)
+
+ALTER TABLE item_pedido
+ADD CONSTRAINT FK_cod_compracliente
+FOREIGN KEY (cod_compracliente) REFERENCES pedido(cod_pedido)
+ON DELETE CASCADE
+
+ALTER TABLE Item_Pedido
+ADD CONSTRAINT FK_cod_item
+FOREIGN KEY (cod_item) REFERENCES livros (cod_livro);
+
+
+ALTER TABLE Item_Pedido
+ADD CONSTRAINT FK_cod_item2
+FOREIGN KEY (cod_item2) REFERENCES livros (cod_livro);
+
+
+/*Atribuindo Dados Finais*/
+ALTER TABLE pedido ADD pedido_cliente INT NOT NULL
+
+ALTER TABLE pedido
+ADD CONSTRAINT FK_pedido_cliente
+FOREIGN KEY (pedido_cliente) REFERENCES cliente (cod_cliente)
+ON DELETE CASCADE
+
+select * from pedido
+
+INSERT INTO pedido (valor_pedido, data_pedido, pedido_cliente)
+Values (62.98, '2024-4-18', 1)
+
+INSERT INTO pedido (valor_pedido, data_pedido, pedido_cliente)
+Values (59.98, '2024-4-18', 2)
+
+INSERT INTO pedido (valor_pedido, data_pedido, pedido_cliente)
+Values (34.99, '2024-4-19', 3), (32.99, '2024-4-20', 4), (24.99, '2024-4-20', 5), (23.99, '2024-4-20', 6), (32.99, '2024-4-21', 7), (51.98, '2024-4-22', 8), (54.98, '2024-4-24', 9), (72.98, '2024-4-26', 10), (39.99, '2024-4-29', 11), (24.99, '2024-4-30', 12), (27.99, '2024-5-1', 13), (29.99, '2024-5-1', 14), (24.99, '2024-5-1', 15), (57.98, '2024-5-3', 16), (74.98, '2024-5-5', 17), (56.98, '2024-5-7', 18), (57.98, '2024-5-7', 19), (54.98, '2024-8-9', 20), (29.99, '2024-5-10', 1), (32.99, '2024-5-11', 6), (24.99, '2024-5-11', 8), (32.99, '2024-5-13', 5), (27.99, '2024-5-15', 13), (34.99, '2024-5-16', 11), (24.99, '2024-5-16', 18), (23.99, '2024-5-19', 20), (39.99, '2024-5-21', 9), (29.99, '2024-5-23', 7);
+
+INSERT INTO item_pedido (cod_compracliente, cod_item, cod_item2)
+Values (1, 1, 3), (2, 2,5)
+
+INSERT INTO item_pedido (cod_compracliente, cod_item)
+Values (3, 2), (4, 7), (5, 6), (6, 1), (7, 3)
+
+INSERT INTO item_pedido (cod_compracliente, cod_item, cod_item2)
+Values (8, 6,9), (9, 10, 4), (10, 8, 7)
+
+INSERT INTO item_pedido (cod_compracliente, cod_item)
+Values (11, 8), (12, 4), (13, 9), (14, 1), (15, 5)
+
+INSERT INTO item_pedido (cod_compracliente, cod_item, cod_item2)
+Values (16, 1,9), (17, 2,8), (18, 3,6), (19, 4,7), (20, 5,10)
+
+INSERT INTO item_pedido (cod_compracliente, cod_item)
+Values (21, 1), (22, 3), (23, 5), (24, 7), (25, 9), (26, 2), (27, 4), (28, 6), (29, 8), (30, 10)
+
+select * from item_pedido
+
+select l.titulo, e.nome_editora from livros l
+INNER JOIN editora e ON (e.cod_editora = l.cod_editora)
